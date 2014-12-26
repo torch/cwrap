@@ -84,7 +84,7 @@ for _,typename in ipairs({"real", "unsigned char", "char", "short", "int", "long
       declare = function(arg)
                    -- if it is a number we initialize here
                    local default = tonumber(interpretdefaultvalue(arg)) or 0
-                   return string.format("%s arg%d = %d;", typename, arg.i, tonumber(default))
+                   return string.format("%s arg%d = %g;", typename, arg.i, default)
                 end,
 
       check = function(arg, idx)
