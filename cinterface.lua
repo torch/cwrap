@@ -4,6 +4,7 @@ function CInterface.new()
    self = {}
    self.txt = {}
    self.registry = {}
+   self.defaultArguments = {}
    setmetatable(self, {__index=CInterface})
    return self
 end
@@ -14,6 +15,10 @@ end
 
 function CInterface:print(str)
    table.insert(self.txt, str)
+end
+
+function CInterface:registerDefaultArgument(code)
+  table.insert(self.defaultArguments, code)
 end
 
 function CInterface:wrap(luaname, ...)
@@ -28,6 +33,10 @@ function CInterface:wrap(luaname, ...)
    table.insert(txt, string.format("static int %s(lua_State *L)", self:luaname2wrapname(luaname)))
    table.insert(txt, "{")
    table.insert(txt, "int narg = lua_gettop(L);")
+
+   for i, defaultArgCode in ipairs(self.defaultArguments) do
+      table.insert(txt, defaultArgCode(string.format("default_arg%d", i)))
+   end
 
    if #varargs == 2 then
       local cfuncname = varargs[1]
@@ -104,6 +113,7 @@ end
 function CInterface:clearhistory()
    self.txt = {}
    self.registry = {}
+   self.defaultArguments = {}
 end
 
 function CInterface:tostring()
@@ -276,6 +286,10 @@ end
 
 function CInterface:__writecall(txt, args, cfuncname, cargs, argcreturned)
    local argtypes = self.argtypes
+
+   for i = 1, #self.defaultArguments do
+      table.insert(cargs, i, string.format('default_arg%d', i))
+   end
 
    for _,arg in ipairs(args) do
       tableinsertcheck(txt, arg:precall())
