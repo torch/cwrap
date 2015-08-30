@@ -1,0 +1,12 @@
+site_name: cwrap
+theme : simplex
+repo_url : https://github.com/torch/cwrap
+use_directory_urls : false
+markdown_extensions: [extra]
+docs_dir : doc
+pages:
+- [index.md, CWrap]
+- [example.md, Example Use Case]
+- [highlevelinterface.md, High Level Interface]
+- [argumenttypes.md, Argument Types]
+- [usertypes.md, User Types]
