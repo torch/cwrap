@@ -263,7 +263,7 @@ function CInterface:__writechecks(txt, args, argset)
       end
    end
 
-   for variant=0,math.pow(2, nopt)-1 do
+   for variant=0,(2^nopt)-1 do
       local opt = 0
       local currentargs = {}
       local optargs = {}
