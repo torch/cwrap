@@ -7,5 +7,5 @@ SET(luasrc
 	   ${CMAKE_CURRENT_SOURCE_DIR}/cinterface.lua 
 	   ${CMAKE_CURRENT_SOURCE_DIR}/types.lua)
 
-INSTALL(FILES ${luasrc} DESTINATION ${LUADIR}/paths)
+INSTALL(FILES ${luasrc} DESTINATION ${LUADIR}/cwrap)
 
