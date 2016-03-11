@@ -74,7 +74,7 @@ argtypes.index = {
               end
 }
 
-for _,typename in ipairs({"real", "unsigned char", "char", "short", "int", "long", "float", "double"}) do
+for _,typename in ipairs({"real", "float", "double"}) do
    argtypes[typename] = {
 
       helpname = function(arg)
@@ -122,6 +122,59 @@ for _,typename in ipairs({"real", "unsigned char", "char", "short", "int", "long
       postcall = function(arg)
                     if arg.creturned then
                        return string.format('lua_pushnumber(L, (lua_Number)arg%d);', arg.i)
+                    end
+                 end
+   }
+end
+
+for _,typename in ipairs({"unsigned char", "char", "short", "int", "long"}) do
+   argtypes[typename] = {
+
+      helpname = function(arg)
+                    return typename
+                 end,
+
+      declare = function(arg)
+                   -- if it is a number we initialize here
+                   local default = tonumber(interpretdefaultvalue(arg)) or 0
+                   return string.format("%s arg%d = %g;", typename, arg.i, default)
+                end,
+
+      check = function(arg, idx)
+                 return string.format("lua_isnumber(L, %d)", idx)
+              end,
+
+      read = function(arg, idx)
+                return string.format("arg%d = (%s)lua_tointeger(L, %d);", arg.i, typename, idx)
+             end,
+
+      init = function(arg)
+                -- otherwise do it here
+                if arg.default then
+                   local default = interpretdefaultvalue(arg)
+                   if not tonumber(default) then
+                      return string.format("arg%d = %s;", arg.i, default)
+                   end
+                end
+             end,
+
+      carg = function(arg)
+                return string.format('arg%d', arg.i)
+             end,
+
+      creturn = function(arg)
+                   return string.format('arg%d', arg.i)
+                end,
+
+      precall = function(arg)
+                   if arg.returned then
+                      return string.format('lua_pushinteger(L, (long)arg%d);', arg.i)
+                   end
+                end,
+
+      postcall = function(arg)
+                    if arg.creturned then
+                       return string.format('lua_pushinteger(L, (long)arg%d);', arg.i)
                     end
                  end
    }
