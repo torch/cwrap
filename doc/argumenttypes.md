@@ -12,7 +12,7 @@ Standard type names include `unsigned char`, `char`, `short`,
 C types, which are converted to/from
 [lua_Number](http://www.lua.org/manual/5.1/manual.html#lua_Number).
 
-Additionaly, `byte` is an equivalent naming for `unsigned char`, and
+Additionally, `byte` is an equivalent naming for `unsigned char`, and
 `boolean` is interpreted as a boolean in Lua, and an int in C.
 
 `real` will also be converted to/from a `lua_Number`, while assuming that
